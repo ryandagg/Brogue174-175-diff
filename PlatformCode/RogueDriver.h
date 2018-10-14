@@ -22,20 +22,18 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "Viewport.h"
+#import <SpriteKit/SpriteKit.h>
 
 #import "Rogue.h"
 
-@interface RogueDriver : NSObject {
-	IBOutlet Viewport *theDisplay;
-	IBOutlet NSMenu *fileMenu;
-	IBOutlet NSWindow *theWindow;
-}
+#define	VERT_PX		18
+#define	HORIZ_PX	11
+#define kROWS		(30+3+1)
+#define kCOLS		100
+#define FONT_SIZE	10
 
-- (void)playBrogue:(id)sender;
+@interface RogueDriver : NSObject
 
-- (void)applicationDidFinishLaunching:(NSNotification *)aNotification;
-
-- (void)windowDidResize:(NSNotification *)aNotification;
+- (void)playBrogue;
 
 @end

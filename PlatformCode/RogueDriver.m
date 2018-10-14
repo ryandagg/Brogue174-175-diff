@@ -21,25 +21,30 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+#import <SpriteKit/SpriteKit.h>
 #include <limits.h>
 #include <unistd.h>
 #include "CoreFoundation/CoreFoundation.h"
 #import "RogueDriver.h"
 #import <QuartzCore/QuartzCore.h>
+#import <TextEdit2-Swift.h>
 
 #define BROGUE_VERSION	4	// A special version number that's incremented only when
 // something about the OS X high scores file structure changes.
 
-static Viewport *theMainDisplay;
-NSDate *pauseStartDate;
+static SKView *theMainView;
 short mouseX, mouseY;
 static CGColorSpaceRef _colorSpace;
+static RogueScene *scene;
 
-@implementation RogueDriver
+@implementation RogueDriver {
+    IBOutlet NSMenu *fileMenu;
+    IBOutlet SKView *skGameView;
+    IBOutlet NSWindow *mainWindow;
+}
 
 - (void)awakeFromNib
 {
-	//extern Viewport *theMainDisplay;
 	NSSize theSize;
 	short versionNumber;
     
@@ -54,86 +59,65 @@ static CGColorSpaceRef _colorSpace;
 		[[NSUserDefaults standardUserDefaults] setInteger:BROGUE_VERSION forKey:@"Brogue version"];
 		[[NSUserDefaults standardUserDefaults] synchronize];
 	}
+
+    [mainWindow setOrderedIndex:0];
+
+    theMainView = skGameView;
     
-	theMainDisplay = theDisplay;
-	[theWindow setFrameAutosaveName:@"Brogue main window"];
-	[theWindow useOptimizedDrawing:YES];
-	[theWindow setAcceptsMouseMovedEvents:YES];
-    
+	[mainWindow setFrameAutosaveName:@"Brogue main window"];
+	[mainWindow useOptimizedDrawing:YES];
+	[mainWindow setAcceptsMouseMovedEvents:YES];
+
     // Comment out this line if you're trying to compile on a system earlier than OS X 10.7:
-    [theWindow setCollectionBehavior:NSWindowCollectionBehaviorFullScreenPrimary];
+    [mainWindow setCollectionBehavior:NSWindowCollectionBehaviorFullScreenPrimary];
     
 	theSize.height = 7 * VERT_PX * kROWS / FONT_SIZE;
 	theSize.width = 7 * HORIZ_PX * kCOLS / FONT_SIZE;
-	[theWindow setContentMinSize:theSize];
-    
+	[mainWindow setContentMinSize:theSize];
+ 
 	mouseX = mouseY = 0;
+    
+    
+    if (!skGameView.scene) {
+     //   skGameView.showsFPS = YES;
+   //     skGameView.showsNodeCount = YES;
+        //skView.showsDrawCount = YES;
+        //skView.showsQuadCount = YES;
+        // Create and configure the scene.
+        
+        
+        // Size doesn't matter, but a larger initial size means the cells will be downscaled (pretty),
+        // rather than upscaled (ugly)
+        CGFloat backingScaleFactor = mainWindow.screen.backingScaleFactor;
+        NSSize screenSize = mainWindow.screen.frame.size;
+        NSSize initalSize = NSMakeSize(screenSize.width * backingScaleFactor, screenSize.height * backingScaleFactor); // Total screen size, taking retina display into account
+        
+        scene = [[RogueScene alloc] initWithSize:initalSize rows:ROWS cols: COLS];
+        scene.scaleMode = SKSceneScaleModeFill;
+        // Present the scene.
+        [skGameView presentScene:scene];
+    }
 }
 
-- (void)playBrogue:(id)__unused sender
+- (void)playBrogue
 {
     _colorSpace = CGColorSpaceCreateDeviceRGB();
-    //UNUSED(sender);
-    //	[fileMenu setAutoenablesItems:NO];
+    // this takes over the thread until qutting.
 	rogueMain();
-    //	[fileMenu setAutoenablesItems:YES];
-	//exit(0);
+    [NSApp terminate:nil];
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification *)__unused aNotification
 {
-    //UNUSED(aNotification);
-	[theWindow makeMainWindow];
-	[theWindow makeKeyWindow];
-	[self windowDidResize:nil];
-	//NSLog(@"\nAspect ratio is %@", [theWindow aspectRatio]);
-	[self playBrogue:nil];
-	[NSApp terminate:nil];
-}
-
-- (void)windowDidResize:(NSNotification *)__unused aNotification
-{
-    //UNUSED(aNotification);
-    NSRect theRect;
-    NSSize testSizeBox;
-    NSMutableDictionary *theAttributes = [[NSMutableDictionary alloc] init];
-    short theWidth, theHeight, theSize;
+	[mainWindow makeMainWindow];
+	[mainWindow makeKeyWindow];
     
-    theRect = [theWindow contentRectForFrameRect:[theWindow frame]];
-    theWidth = theRect.size.width;
-    theHeight = theRect.size.height;
-    theSize = min(FONT_SIZE * theWidth / (HORIZ_PX * kCOLS), FONT_SIZE * theHeight / (VERT_PX * kROWS));
-    //NSLog(@"Start theSize=%d (w=%d, h=%d)", theSize, theWidth, theHeight);
-    do {
-        [theAttributes setObject:[NSFont fontWithName:[theMainDisplay basicFontName] size:theSize] forKey:NSFontAttributeName];
-        testSizeBox = [@"a" sizeWithAttributes:theAttributes];
-        //NSLog(@"theSize=%d testSizeBox w=%f, h=%f", theSize, testSizeBox.width, testSizeBox.height);
-        theSize++;
-    } while (testSizeBox.width < theWidth / kCOLS && testSizeBox.height < theHeight / kROWS);
-    // Now theSize is one more than what was passed in to fontWithName:size:.  Also need to subtract 1 to get to the
-    // last box that fit.
-    //    [theMainDisplay setHorizPixels:(theWidth / kCOLS) vertPixels:(theHeight / kROWS) fontSize:max(theSize - 2, 9)];
-    [theMainDisplay setHorizWindow:theWidth vertWindow:theHeight fontSize:max(theSize - 2, 9)];
-    //NSLog(@"End theSize=%d (w=%d, h=%d)  (tW/kC=%f, tH/kR=%f)", theSize, theWidth, theHeight, (theWidth / (float)kCOLS), (theHeight / (float)kROWS));
-    [theAttributes release];
-}
+	//NSLog(@"\nAspect ratio is %@", [theWindow aspectRatio]);
 
-//- (NSRect)windowWillUseStandardFrame:(NSWindow *)window
-//					  defaultFrame:(NSRect)defaultFrame
-//{
-//	NSRect theRect;
-//	if (defaultFrame.size.width > HORIZ_PX * kCOLS) {
-//		theRect.size.width = HORIZ_PX * kCOLS;
-//		theRect.size.height = VERT_PX * kROWS;
-//	} else {
-//		theRect.size.width = (HORIZ_PX - 1) * kCOLS;
-//		theRect.size.height = (VERT_PX - 2) * kROWS;
-//	}
-//
-//	theRect.origin = [window contentRectForFrameRect:[window frame]].origin;
-//	theRect.origin.y += ([window contentRectForFrameRect:[window frame]].size.height - theRect.size.height);
-//
-//	if (th
+    NSThread *thread = [[NSThread alloc] initWithTarget:self selector:@selector(playBrogue) object:nil];
+    [thread setStackSize:500 * 8192];
+    [thread start];
+}
 
 @end
 
@@ -144,7 +128,7 @@ void plotChar(uchar inputChar,
 			  short xLoc, short yLoc,
 			  short foreRed, short foreGreen, short foreBlue,
 			  short backRed, short backGreen, short backBlue) {
-    //	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     
     CGFloat backComponents[] = {(CGFloat)(backRed/100.), (CGFloat)(backGreen/100.), (CGFloat)(backBlue/100.), 1.};
     CGColorRef backColor = CGColorCreate(_colorSpace, backComponents);
@@ -152,92 +136,84 @@ void plotChar(uchar inputChar,
     CGFloat foreComponents[] = {(CGFloat)(foreRed/100.), (CGFloat)(foreGreen/100.), (CGFloat)(foreBlue/100.), 1.};
     CGColorRef foreColor = CGColorCreate(_colorSpace, foreComponents);
     
-    NSString *unicodeString = nil;
-    if (inputChar > 127 && inputChar != 183) {
-        unicodeString = [NSString stringWithCharacters:&inputChar length:1];
-    }
+    [scene setCellWithX:xLoc y:yLoc code:inputChar bgColor:backColor fgColor:foreColor];
     
-    [theMainDisplay setString:unicodeString
-               withBackground:backColor
-              withLetterColor:foreColor
-                  atLocationX:xLoc locationY:yLoc
-                withFancyFont:(inputChar == FOLIAGE_CHAR) withChar:inputChar];
-	//[pool drain];
-}
+    CGColorRelease(backColor);
+    CGColorRelease(foreColor);
 
-void pausingTimerStartsNow() {
-    [pauseStartDate release];
-	pauseStartDate = [NSDate date];
-	[pauseStartDate retain];
-	//printf("\nPause timer started!");
-}
-
-// Returns true if the player interrupted the wait with a keystroke; otherwise false.
-boolean pauseForMilliseconds(short milliseconds) {
-	NSEvent *theEvent;
-	NSDate *targetDate;//, *currentDate;
-    //    NSComparisonResult theCompare;
-    
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    
-    //currentDate = [NSDate date];
-    if (pauseStartDate) {
-        //            NSLog(@"\nStarting a pause: previous date was %@.", pauseStartDate);
-        targetDate = [NSDate dateWithTimeInterval:((double) milliseconds) / 1000 sinceDate:pauseStartDate];
-        [pauseStartDate release];
-        pauseStartDate = NULL;
-    } else {
-        targetDate = [NSDate dateWithTimeIntervalSinceNow: ((double) milliseconds) / 1000];
-    }
-    //        theCompare = [targetDate compare:currentDate];
-    
-    //        if (theCompare != NSOrderedAscending) {
-    do {
-        theEvent = [NSApp nextEventMatchingMask:NSAnyEventMask untilDate:targetDate
-                                         inMode:NSDefaultRunLoopMode dequeue:YES];
-        if (([theEvent type] == NSKeyDown && !([theEvent modifierFlags] & NSCommandKeyMask))
-            || [theEvent type] == NSLeftMouseUp
-            || [theEvent type] == NSLeftMouseDown
-            || [theEvent type] == NSRightMouseUp
-            || [theEvent type] == NSRightMouseDown
-            || [theEvent type] == NSMouseMoved
-            || [theEvent type] == NSLeftMouseDragged
-            || [theEvent type] == NSRightMouseDragged) {
-            [NSApp postEvent:theEvent atStart:TRUE]; // put the event back on the queue
-            return true;
-        } else if (theEvent != nil) {
-            [NSApp sendEvent:theEvent];
-        }
-    } while (theEvent != nil);
-    //        } else {
-    //            [NSApp updateWindows];
-    //            NSLog(@"\nSkipped a pause: target date was %@; current date was %@; comparison was %i.", targetDate, currentDate, theCompare);
-    //        }
-    
 	[pool drain];
-	return false;
+}
+
+boolean isApplicationActive() {
+    return [[NSRunningApplication currentApplication] isActive];
+}
+
+void eventLocation(NSEvent *theEvent, short *x, short *y) {
+    NSPoint event_location;
+    NSPoint local_point;
+    
+    event_location = [theEvent locationInWindow];
+    local_point = [theMainView convertPoint:event_location fromView:nil];
+    
+    NSRect frameRect = [theMainView.window contentRectForFrameRect:[theMainView.window frame]];
+    *x = COLS * local_point.x / frameRect.size.width;
+    *y = ROWS - ROWS * local_point.y / frameRect.size.height;
+    
+    // Correct for the fact that truncation occurs in a positive direction when we're below zero:
+    if (local_point.x < 0) {
+        (*x)--;
+    }
+    if (frameRect.size.height < local_point.y) {
+        (*y)--;
+    }
+}
+
+// Return true if the event is a mouse move event within the same cell.
+boolean discardEvent(NSEvent *theEvent) {
+    short x, y;
+    NSEventType theEventType = [theEvent type];
+    eventLocation(theEvent, &x, &y);
+    return (theEventType == NSEventTypeMouseMoved && x == mouseX && y == mouseY);
+}
+
+// Returns true if the player interrupted the wait with a keystroke or mouse action; otherwise false.
+boolean pauseForMilliseconds(short milliseconds) {
+    if (isApplicationActive()) {
+        for (; milliseconds > 0; milliseconds -= 16) {
+            if (scene.aEvent) {
+                if (discardEvent(scene.aEvent)) {
+                    scene.aEvent = nil;
+                } else {
+                    return YES;
+                }
+            }
+            if (milliseconds >= 16) {
+                [NSThread sleepForTimeInterval:0.016];
+            } else {
+                [NSThread sleepForTimeInterval:((double) milliseconds) / 1000];
+            }
+        }
+    } else {
+        [NSThread sleepForTimeInterval:((double) milliseconds) / 1000];
+    }
+    if (scene.aEvent) {
+        return YES;
+    }
+    return NO;
 }
 
 void nextKeyOrMouseEvent(rogueEvent *returnEvent, __unused boolean textInput, boolean colorsDance) {
-	//UNUSED(textInput);
-    NSEvent *theEvent;
-	NSEventType theEventType;
-	NSPoint event_location;
-	NSPoint local_point;
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    
+    NSEvent *theEvent = nil;
+	NSEventType theEventType = nil;
 	short x, y;
     
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    
     for(;;) {
-        if (colorsDance) {
-            shuffleTerrainColors(3, true);
-            commitDraws();
-        }
+        theEvent = [scene aEvent];
+        // nil the event or it will repeat (e.g. 'x' to explore will be pressed repeatedly).
+        scene.aEvent = nil;
         
-        theEvent = [NSApp nextEventMatchingMask:NSAnyEventMask
-                                      untilDate:[NSDate dateWithTimeIntervalSinceNow: ((NSTimeInterval) ((double) 50) / ((double) 1000))]
-                                         inMode:NSDefaultRunLoopMode
-                                        dequeue:YES];
         theEventType = [theEvent type];
         if (theEventType == NSKeyDown && !([theEvent modifierFlags] & NSCommandKeyMask)) {
             returnEvent->eventType = KEYSTROKE;
@@ -247,63 +223,59 @@ void nextKeyOrMouseEvent(rogueEvent *returnEvent, __unused boolean textInput, bo
             returnEvent->controlKey = ([theEvent modifierFlags] & NSControlKeyMask ? 1 : 0);
             returnEvent->shiftKey = ([theEvent modifierFlags] & NSShiftKeyMask ? 1 : 0);
             break;
-        } else if (theEventType == NSLeftMouseDown
-                   || theEventType == NSLeftMouseUp
-                   || theEventType == NSRightMouseDown
-                   || theEventType == NSRightMouseUp
-                   || theEventType == NSMouseMoved
-                   || theEventType == NSLeftMouseDragged
-                   || theEventType == NSRightMouseDragged) {
-            [NSApp sendEvent:theEvent];
+        } else if (theEventType == NSEventTypeLeftMouseDown
+                   || theEventType == NSEventTypeLeftMouseUp
+                   || theEventType == NSEventTypeRightMouseDown
+                   || theEventType == NSEventTypeRightMouseUp
+                   || theEventType == NSEventTypeMouseMoved
+                   || theEventType == NSEventTypeLeftMouseDragged
+                   || theEventType == NSEventTypeRightMouseDragged) {
+            
             switch (theEventType) {
-                case NSLeftMouseDown:
+                    // TODO: these const are depcrecated. Use new names.
+                case NSEventTypeLeftMouseDown:
                     returnEvent->eventType = MOUSE_DOWN;
                     break;
-                case NSLeftMouseUp:
+                case NSEventTypeLeftMouseUp:
                     returnEvent->eventType = MOUSE_UP;
                     break;
-                case NSRightMouseDown:
+                case NSEventTypeRightMouseDown:
                     returnEvent->eventType = RIGHT_MOUSE_DOWN;
                     break;
-                case NSRightMouseUp:
+                case NSEventTypeRightMouseUp:
                     returnEvent->eventType = RIGHT_MOUSE_UP;
                     break;
-                case NSMouseMoved:
-                case NSLeftMouseDragged:
-                case NSRightMouseDragged:
+                case NSEventTypeMouseMoved:
+                case NSEventTypeLeftMouseDragged:
+                case NSEventTypeRightMouseDragged:
                     returnEvent->eventType = MOUSE_ENTERED_CELL;
                     break;
                 default:
                     break;
             }
-            event_location = [theEvent locationInWindow];
-            local_point = [theMainDisplay convertPoint:event_location fromView:nil];
-            x = COLS * local_point.x / [theMainDisplay horizWindow];
-            y = ROWS - (ROWS * local_point.y / [theMainDisplay vertWindow]);
-            // Correct for the fact that truncation occurs in a positive direction when we're below zero:
-            if (local_point.x < 0) {
-                x--;
-            }
-            if ([theMainDisplay vertWindow] < local_point.y) {
-                y--;
-            }
+            eventLocation(theEvent, &x, &y);
             returnEvent->param1 = x;
             returnEvent->param2 = y;
             returnEvent->controlKey = ([theEvent modifierFlags] & NSControlKeyMask ? 1 : 0);
             returnEvent->shiftKey = ([theEvent modifierFlags] & NSShiftKeyMask ? 1 : 0);
-            //			if (theEventType != NSMouseMoved || x != mouseX || y != mouseY) { // Don't send mouse_entered_cell events if the cell hasn't changed
             mouseX = x;
             mouseY = y;
             break;
-            //			}
-        }
-        if (theEvent != nil) {
-            [NSApp sendEvent:theEvent]; // pass along any other events so, e.g., the menus work
+        } else {
+            if (isApplicationActive()) {
+                [NSThread sleepForTimeInterval:0.016667];
+                if (colorsDance) {
+                    shuffleTerrainColors(3, true);
+                    commitDraws();
+                }
+            } else {
+                [NSThread sleepForTimeInterval:0.5];
+            }
         }
     }
-    // printf("\nRogueEvent: eventType: %i, param1: %i, param2: %i, controlKey: %s, shiftKey: %s", returnEvent->eventType, returnEvent->param1,
-    //			 returnEvent->param2, returnEvent->controlKey ? "true" : "false", returnEvent->shiftKey ? "true" : "false");
     
+    theEvent = nil;
+
 	[pool drain];
 }
 
@@ -508,7 +480,8 @@ fileEntry *listFiles(short *fileCount, char **dynamicMemoryBuffer) {
 	bufferPosition = bufferSize = 0;
 	*dynamicMemoryBuffer = NULL;
     
-	dateFormatter = [[NSDateFormatter alloc] initWithDateFormat:@"%1m/%1d/%y" allowNaturalLanguage:YES];
+    dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
+    [dateFormatter setDateFormat:@"M/d/yy"];
     
 	array = [manager contentsOfDirectoryAtPath:[manager currentDirectoryPath] error:&err];
 	count = [array count];
@@ -553,3 +526,12 @@ fileEntry *listFiles(short *fileCount, char **dynamicMemoryBuffer) {
 	*fileCount = count + ADD_FAKE_PADDING_FILES;
 	return fileList;
 }
+
+
+// Returns a pointer to a char* containing the contents of the clipboard
+#ifdef USE_CLIPBOARD
+char *getClipboard() {
+    NSString *pasteboardData = [[NSPasteboard generalPasteboard] stringForType:NSPasteboardTypeString];
+    return (char*)[pasteboardData cStringUsingEncoding:NSUTF8StringEncoding];
+}
+#endif
