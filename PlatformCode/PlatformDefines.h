@@ -25,3 +25,8 @@
 // should go in here.
 
 
+#define USE_CLIPBOARD // Allows pasting in input fields
+
+#ifdef USE_CLIPBOARD
+char *getClipboard();
+#endif

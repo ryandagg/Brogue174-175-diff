@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD58140DA1D0A300B32029 /* MainMenu.xib */; };
+		5818E8CF1E97233A00F3BE5C /* Sqrt.c in Sources */ = {isa = PBXBuildFile; fileRef = 5818E8CE1E97233A00F3BE5C /* Sqrt.c */; };
+		5818E8D11E9B3F6800F3BE5C /* PowerTables.c in Sources */ = {isa = PBXBuildFile; fileRef = 5818E8D01E9B3F6800F3BE5C /* PowerTables.c */; };
 		5852BB4C118650A10064384E /* Architect.c in Sources */ = {isa = PBXBuildFile; fileRef = 5852BB40118650A10064384E /* Architect.c */; };
 		5852BB4D118650A20064384E /* Combat.c in Sources */ = {isa = PBXBuildFile; fileRef = 5852BB41118650A10064384E /* Combat.c */; };
 		5852BB4E118650A20064384E /* Globals.c in Sources */ = {isa = PBXBuildFile; fileRef = 5852BB42118650A10064384E /* Globals.c */; };
@@ -19,7 +21,6 @@
 		5852BB54118650A20064384E /* RogueMain.c in Sources */ = {isa = PBXBuildFile; fileRef = 5852BB4A118650A10064384E /* RogueMain.c */; };
 		5852BB60118650D90064384E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5852BB5A118650D90064384E /* main.m */; };
 		5852BB61118650D90064384E /* RogueDriver.m in Sources */ = {isa = PBXBuildFile; fileRef = 5852BB5D118650D90064384E /* RogueDriver.m */; };
-		5852BB62118650D90064384E /* Viewport.m in Sources */ = {isa = PBXBuildFile; fileRef = 5852BB5F118650D90064384E /* Viewport.m */; };
 		5852BB9C118652BA0064384E /* Dijkstra.c in Sources */ = {isa = PBXBuildFile; fileRef = 5852BB9B118652BA0064384E /* Dijkstra.c */; };
 		58831148109E46C800FF029E /* Brogue Icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 58831147109E46C800FF029E /* Brogue Icon.icns */; };
 		58A17EDB1235ACA100647687 /* Recordings.c in Sources */ = {isa = PBXBuildFile; fileRef = 58A17EDA1235ACA100647687 /* Recordings.c */; };
@@ -30,6 +31,8 @@
 		69C7414A1775466100CD2D5F /* Time.c in Sources */ = {isa = PBXBuildFile; fileRef = 69C741491775466100CD2D5F /* Time.c */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+		BC12F45B1EB009A6001945BE /* RogueScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC12F45A1EB009A6001945BE /* RogueScene.swift */; };
+		BC12F45D1EB00D4C001945BE /* Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC12F45C1EB00D4C001945BE /* Cell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,6 +42,8 @@
 		1DDD58150DA1D0A300B32029 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		5818E8CE1E97233A00F3BE5C /* Sqrt.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Sqrt.c; path = BrogueCode/Sqrt.c; sourceTree = "<group>"; };
+		5818E8D01E9B3F6800F3BE5C /* PowerTables.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = PowerTables.c; path = BrogueCode/PowerTables.c; sourceTree = "<group>"; };
 		5852BB40118650A10064384E /* Architect.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; lineEnding = 0; name = Architect.c; path = BrogueCode/Architect.c; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.c; };
 		5852BB41118650A10064384E /* Combat.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Combat.c; path = BrogueCode/Combat.c; sourceTree = "<group>"; };
 		5852BB42118650A10064384E /* Globals.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Globals.c; path = BrogueCode/Globals.c; sourceTree = "<group>"; };
@@ -53,8 +58,6 @@
 		5852BB5A118650D90064384E /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = PlatformCode/main.m; sourceTree = "<group>"; };
 		5852BB5C118650D90064384E /* RogueDriver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RogueDriver.h; path = PlatformCode/RogueDriver.h; sourceTree = "<group>"; };
 		5852BB5D118650D90064384E /* RogueDriver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RogueDriver.m; path = PlatformCode/RogueDriver.m; sourceTree = "<group>"; };
-		5852BB5E118650D90064384E /* Viewport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Viewport.h; path = PlatformCode/Viewport.h; sourceTree = "<group>"; };
-		5852BB5F118650D90064384E /* Viewport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Viewport.m; path = PlatformCode/Viewport.m; sourceTree = "<group>"; };
 		5852BB9B118652BA0064384E /* Dijkstra.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Dijkstra.c; path = BrogueCode/Dijkstra.c; sourceTree = "<group>"; };
 		58831147109E46C800FF029E /* Brogue Icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = "Brogue Icon.icns"; sourceTree = "<group>"; };
 		58A17EDA1235ACA100647687 /* Recordings.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Recordings.c; path = BrogueCode/Recordings.c; sourceTree = "<group>"; };
@@ -65,7 +68,10 @@
 		69A642201476EC76006246FB /* Buttons.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Buttons.c; path = BrogueCode/Buttons.c; sourceTree = "<group>"; };
 		69C741491775466100CD2D5F /* Time.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Time.c; path = BrogueCode/Time.c; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		8D1107320486CEB800E47090 /* Brogue.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Brogue.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8D1107320486CEB800E47090 /* TextEdit2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TextEdit2.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		BC12F45A1EB009A6001945BE /* RogueScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RogueScene.swift; path = PlatformCode/RogueScene.swift; sourceTree = "<group>"; };
+		BC12F45C1EB00D4C001945BE /* Cell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Cell.swift; path = PlatformCode/Cell.swift; sourceTree = "<group>"; };
+		C54E80A71EBEC46800A0E086 /* Brogue-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Brogue-Bridging-Header.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,9 +92,10 @@
 				5852BB5A118650D90064384E /* main.m */,
 				5852BB5C118650D90064384E /* RogueDriver.h */,
 				5852BB5D118650D90064384E /* RogueDriver.m */,
-				5852BB5E118650D90064384E /* Viewport.h */,
-				5852BB5F118650D90064384E /* Viewport.m */,
 				58CA453411A8C4F9006D03FC /* PlatformDefines.h */,
+				BC12F45A1EB009A6001945BE /* RogueScene.swift */,
+				BC12F45C1EB00D4C001945BE /* Cell.swift */,
+				C54E80A71EBEC46800A0E086 /* Brogue-Bridging-Header.h */,
 			);
 			name = "Platform Code";
 			sourceTree = "<group>";
@@ -114,7 +121,7 @@
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				8D1107320486CEB800E47090 /* Brogue.app */,
+				8D1107320486CEB800E47090 /* TextEdit2.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -152,6 +159,8 @@
 				5852BB48118650A10064384E /* Movement.c */,
 				69C741491775466100CD2D5F /* Time.c */,
 				694753051672E75D003BE7CB /* Grid.c */,
+				5818E8CE1E97233A00F3BE5C /* Sqrt.c */,
+				5818E8D01E9B3F6800F3BE5C /* PowerTables.c */,
 			);
 			name = "Brogue Code";
 			sourceTree = "<group>";
@@ -194,7 +203,7 @@
 			name = Brogue;
 			productInstallPath = "$(HOME)/Applications";
 			productName = RogueCocoa;
-			productReference = 8D1107320486CEB800E47090 /* Brogue.app */;
+			productReference = 8D1107320486CEB800E47090 /* TextEdit2.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -203,7 +212,12 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0460;
+				LastUpgradeCheck = 0600;
+				TargetAttributes = {
+					8D1107260486CEB800E47090 = {
+						LastSwiftMigration = 0830;
+					};
+				};
 			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Brogue" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -243,22 +257,25 @@
 			buildActionMask = 2147483647;
 			files = (
 				5852BB4C118650A10064384E /* Architect.c in Sources */,
+				BC12F45D1EB00D4C001945BE /* Cell.swift in Sources */,
 				5852BB4D118650A20064384E /* Combat.c in Sources */,
 				5852BB4E118650A20064384E /* Globals.c in Sources */,
+				5818E8CF1E97233A00F3BE5C /* Sqrt.c in Sources */,
 				5852BB4F118650A20064384E /* IO.c in Sources */,
 				5852BB50118650A20064384E /* Items.c in Sources */,
 				5852BB51118650A20064384E /* Light.c in Sources */,
 				5852BB52118650A20064384E /* Monsters.c in Sources */,
 				5852BB53118650A20064384E /* Movement.c in Sources */,
 				5852BB54118650A20064384E /* RogueMain.c in Sources */,
+				5818E8D11E9B3F6800F3BE5C /* PowerTables.c in Sources */,
 				5852BB60118650D90064384E /* main.m in Sources */,
 				5852BB61118650D90064384E /* RogueDriver.m in Sources */,
-				5852BB62118650D90064384E /* Viewport.m in Sources */,
 				5852BB9C118652BA0064384E /* Dijkstra.c in Sources */,
 				58EE4FF7120E01FB0020458E /* Random.c in Sources */,
 				58A17EDB1235ACA100647687 /* Recordings.c in Sources */,
 				69A642211476EC76006246FB /* Buttons.c in Sources */,
 				696F73E814C27D9F00CF8C90 /* MainMenu.c in Sources */,
+				BC12F45B1EB009A6001945BE /* RogueScene.swift in Sources */,
 				694753061672E75D003BE7CB /* Grid.c in Sources */,
 				69C7414A1775466100CD2D5F /* Time.c in Sources */,
 			);
@@ -290,10 +307,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
+				DEFINES_MODULE = YES;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -323,11 +342,16 @@
 				GCC_WARN_UNUSED_VALUE = YES;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
-				MACOSX_DEPLOYMENT_TARGET = 10.5;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MODULEMAP_FILE = "TextEdit2-Swift.h";
 				ONLY_ACTIVE_ARCH = NO;
-				PRODUCT_NAME = Brogue;
-				SDKROOT = macosx10.8;
-				VALID_ARCHS = "i386 x86_64";
+				PRODUCT_NAME = TextEdit2;
+				SDKROOT = macosx;
+				SWIFT_OBJC_BRIDGING_HEADER = "Brogue-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
+				VALID_ARCHS = x86_64;
 			};
 			name = Debug;
 		};
@@ -335,9 +359,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				COMBINE_HIDPI_IMAGES = YES;
+				DEFINES_MODULE = YES;
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = RogueCocoa_Prefix.pch;
@@ -347,10 +373,14 @@
 				GCC_WARN_SIGN_COMPARE = YES;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
-				MACOSX_DEPLOYMENT_TARGET = 10.5;
-				PRODUCT_NAME = Brogue;
-				SDKROOT = macosx10.8;
-				VALID_ARCHS = "i386 x86_64";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MODULEMAP_FILE = "TextEdit2-Swift.h";
+				PRODUCT_NAME = TextEdit2;
+				SDKROOT = macosx;
+				SWIFT_OBJC_BRIDGING_HEADER = "Brogue-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
+				VALID_ARCHS = x86_64;
 			};
 			name = Release;
 		};
